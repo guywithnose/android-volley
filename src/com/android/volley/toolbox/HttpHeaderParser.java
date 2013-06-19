@@ -29,6 +29,7 @@ import java.util.Map;
  * Utility methods for parsing HTTP headers.
  */
 public class HttpHeaderParser {
+    private static final long DEFAULT_MAX_AGE = 3600000;
 
     /**
      * Extracts a {@link Cache.Entry} from a {@link NetworkResponse}.
@@ -88,6 +89,8 @@ public class HttpHeaderParser {
         } else if (serverDate > 0 && serverExpires >= serverDate) {
             // Default semantic for Expire header in HTTP specification is softExpire.
             softExpire = now + (serverExpires - serverDate);
+        } else {
+            softExpire = now + DEFAULT_MAX_AGE;
         }
 
         Cache.Entry entry = new Cache.Entry();
